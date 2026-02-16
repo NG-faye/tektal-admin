@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+/* Garde ton style pour le body en dessous */
+body {
+  @apply bg-gray-50 text-slate-900;
+  font-family: 'Inter', sans-serif;
+}
