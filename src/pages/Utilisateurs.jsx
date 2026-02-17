@@ -1,8 +1,18 @@
-import { useState, useEffect } from 'react';
-import { Search, Users, ShieldCheck, Ban } from 'lucide-react';
+import { Search, Users, ShieldCheck, Ban } from "lucide-react";
+import { useConnectedUsers } from "../api/hooks";
 
 const Utilisateurs = () => {
-  const [users, setUsers] = useState([]);
+  const { data: users, loading, error, refetch } = useConnectedUsers();
+
+  const handleBan = (id) => {
+    // Ici tu peux appeler ton endpoint pour bannir un utilisateur
+    alert(`Bannir utilisateur ${id} - à implémenter`);
+  };
+
+  const handleVerify = (id) => {
+    // Ici tu peux appeler ton endpoint pour vérifier un utilisateur
+    alert(`Vérifier utilisateur ${id} - à implémenter`);
+  };
 
   return (
     <div className="space-y-6">
@@ -17,32 +27,46 @@ const Utilisateurs = () => {
         />
       </div>
 
-      <div className="space-y-3">
-        {users.length === 0 ? (
-          <div className="bg-white p-12 rounded-xl border border-dashed border-gray-300 text-center text-gray-400">
-            <Users className="mx-auto mb-2 opacity-10" size={48} />
-            <p>Base de données utilisateurs vide.</p>
-          </div>
-        ) : (
-          users.map((user) => (
+      {loading ? (
+        <p className="text-gray-500 text-center">Chargement des utilisateurs...</p>
+      ) : error ? (
+        <p className="text-red-500 text-center">Erreur: {JSON.stringify(error)}</p>
+      ) : users.length === 0 ? (
+        <div className="bg-white p-12 rounded-xl border border-dashed border-gray-300 text-center text-gray-400">
+          <Users className="mx-auto mb-2 opacity-10" size={48} />
+          <p>Base de données utilisateurs vide.</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {users.map((user) => (
             <div key={user.id} className="bg-white p-4 rounded-xl border border-gray-100 flex justify-between items-center shadow-sm">
               <div className="flex items-center gap-4">
                 <div className="w-11 h-11 rounded-full bg-[#FEBD00]/20 text-[#FEBD00] flex items-center justify-center font-bold">
-                  {user.nom ? user.nom.charAt(0).toUpperCase() : 'U'}
+                  {user.username.charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <h3 className="font-bold text-slate-800">{user.nom}</h3>
-                  <p className="text-xs text-gray-400">{user.telephone}</p>
+                  <h3 className="font-bold text-slate-800">{user.username}</h3>
+                  <p className="text-xs text-gray-400">{user.email}</p>
                 </div>
               </div>
               <div className="flex gap-2">
-                <button className="p-2 text-gray-400 hover:text-[#FEBD00] transition-colors"><ShieldCheck size={20} /></button>
-                <button className="p-2 text-gray-400 hover:text-red-500 transition-colors"><Ban size={20} /></button>
+                <button 
+                  className="p-2 text-gray-400 hover:text-[#FEBD00] transition-colors"
+                  onClick={() => handleVerify(user.id)}
+                >
+                  <ShieldCheck size={20} />
+                </button>
+                <button 
+                  className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                  onClick={() => handleBan(user.id)}
+                >
+                  <Ban size={20} />
+                </button>
               </div>
             </div>
-          ))
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
