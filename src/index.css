@@ -1,6 +1,15 @@
 @import "tailwindcss";
 
-/* Garde ton style pour le body en dessous */
+/* ────────────────────────────────────────────── */
+/* Fix warning -webkit-text-size-adjust (Tailwind preflight) */
+/* ────────────────────────────────────────────── */
+html {
+  -webkit-text-size-adjust: auto; /* ou 100% */
+}
+
+/* ────────────────────────────────────────────── */
+/* Ton style global pour le body */
+/* ────────────────────────────────────────────── */
 body {
   @apply bg-gray-50 text-slate-900;
   font-family: 'Inter', sans-serif;
