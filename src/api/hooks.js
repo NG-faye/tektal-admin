@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
 import {
   getPaths,
+  createPath,
   approvePath,
   rejectPath,
-  createPath
+  deletePath
 } from "./apiService";
 
-// Hook générique pour fetch
+// ===== Hook générique pour fetch =====
 const useFetch = (fetchFn, deps = []) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -32,18 +33,24 @@ const useFetch = (fetchFn, deps = []) => {
   return { data, loading, error, refetch: fetch };
 };
 
-// ── ADMIN PATHS ──
-export const usePathsList = () => useFetch(getPaths);
+// ===== HOOKS ADMIN =====
+export const usePathsList = (token) =>
+  useFetch(() => getPaths(token));
 
-export const usePathActions = (onSuccess) => {
+export const usePathActions = (token, onSuccess) => {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const run = async (fn) => {
     setLoading(true);
+    setError(null);
     try {
       const result = await fn();
-      onSuccess?.();
+      onSuccess?.(result);
       return result;
+    } catch (err) {
+      setError(err.response?.data || err.message);
+      throw err;
     } finally {
       setLoading(false);
     }
@@ -51,23 +58,31 @@ export const usePathActions = (onSuccess) => {
 
   return {
     loading,
-    approve: (id) => run(() => approvePath(id)),
-    reject: (id) => run(() => rejectPath(id))
+    error,
+    approve: (id) => run(() => approvePath(id, token)),
+    reject: (id) => run(() => rejectPath(id, token)),
+    remove: (id) => run(() => deletePath(id, token))
   };
 };
 
-export const useCreatePath = (onSuccess) => {
+export const useCreatePath = (token, onSuccess) => {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const create = async (formData) => {
     setLoading(true);
+    setError(null);
     try {
-      await createPath(formData);
+      const result = await createPath(formData, token);
       onSuccess?.();
+      return result;
+    } catch (err) {
+      setError(err.response?.data || err.message);
+      throw err;
     } finally {
       setLoading(false);
     }
   };
 
-  return { create, loading };
+  return { create, loading, error };
 };

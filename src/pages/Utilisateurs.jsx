@@ -1,5 +1,5 @@
 import { Search, Users, ShieldCheck, Ban } from "lucide-react";
-import { useConnectedUsers } from "../api/hooks";
+import { usePathsList } from "../api/hooks";
 
 const Utilisateurs = () => {
   const { data: users, loading, error, refetch } = useConnectedUsers();

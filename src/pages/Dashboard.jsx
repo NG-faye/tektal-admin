@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import StatCard from "../components/StatCard";
-import { usePathsList, useConnectedUsers } from "../api/hooks";
+import { usePathsList } from "../api/hooks";
 
 const Dashboard = () => {
   const { data: chemins, loading: loadingPaths } = usePathsList();

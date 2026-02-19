@@ -1,72 +1,67 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api/apiService";
-import jwt_decode from "jwt-decode";
+import * as jwt_decode from "jwt-decode"; // ⚡ correction
+import { login } from "../api/apiService";
 
 const Login = () => {
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setError(null);
 
     try {
-      const { data } = await api.post("/api/token/", {
-        email,
-        password,
-      });
-
-      const decoded = jwt_decode(data.access);
-
-      // Vérifier si admin
-      if (!decoded.is_staff) {
-        setError("Accès refusé. Admin uniquement.");
-        return;
-      }
-
+      const data = await login(email, password);
       localStorage.setItem("access_token", data.access);
       localStorage.setItem("refresh_token", data.refresh);
 
-      navigate("/");
+      // Décoder le token pour récupérer les infos
+      const userInfo = jwt_decode.default(data.access); 
+      console.log("User info:", userInfo);
+
+      // Rediriger vers le dashboard admin
+      navigate("/chemins");
     } catch (err) {
       setError("Email ou mot de passe incorrect");
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+    <div className="flex justify-center items-center h-screen bg-gray-50">
       <form
-        onSubmit={handleLogin}
-        className="bg-white p-8 rounded-xl shadow-md w-96 space-y-4"
+        onSubmit={handleSubmit}
+        className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm space-y-4"
       >
         <h2 className="text-2xl font-bold text-center">Connexion Admin</h2>
 
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+        {error && <p className="text-red-500">{error}</p>}
 
         <input
           type="email"
           placeholder="Email"
-          className="w-full border p-3 rounded-lg"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="w-full border rounded-xl px-4 py-2"
+          required
         />
 
         <input
           type="password"
           placeholder="Mot de passe"
-          className="w-full border p-3 rounded-lg"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="w-full border rounded-xl px-4 py-2"
+          required
         />
 
         <button
           type="submit"
-          className="w-full bg-[#FEBD00] text-white py-3 rounded-lg font-semibold"
+          className="w-full bg-[#FEBD00] hover:bg-yellow-400 text-black font-semibold py-2 rounded-xl"
         >
-          Se connecter
+          Connexion
         </button>
       </form>
     </div>
