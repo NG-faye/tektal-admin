@@ -1,54 +1,58 @@
 import axios from "axios";
 
-// 🔥 URL de base de ton backend Django
-const BASE_URL = "http://localhost:8000/api";
+const API_URL = "http://127.0.0.1:8000/";
 
-// ===== AUTHENTIFICATION ADMIN =====
+// Login admin
 export const login = async (email, password) => {
-  const response = await axios.post(`${BASE_URL}/auth/jwt/create/`, {
+  const response = await axios.post(`${API_URL}admin-panel/api/admin/login/`, {
     email,
-    password
+    password,
   });
-  return response.data; // { access, refresh }
-};
-
-// ===== PARCOURS (Chemins) =====
-export const getPaths = async () => {
-  const response = await axios.get(`${BASE_URL}/paths/`);
   return response.data;
 };
 
-export const createPath = async (formData, token) => {
-  const response = await axios.post(`${BASE_URL}/paths/`, formData, {
+// Liste des parcours admin
+export const fetchPaths = async () => {
+  const token = localStorage.getItem("access_token");
+  const response = await axios.get(`${API_URL}admin-panel/api/paths/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
+
+// Approuver un parcours
+export const approvePath = async (id) => {
+  const token = localStorage.getItem("access_token");
+  await axios.post(`${API_URL}admin-panel/api/paths/${id}/approve/`, {}, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+// Refuser un parcours
+export const rejectPath = async (id) => {
+  const token = localStorage.getItem("access_token");
+  await axios.post(`${API_URL}admin-panel/api/paths/${id}/reject/`, {}, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+// Créer un parcours
+export const createPath = async (formData) => {
+  const token = localStorage.getItem("access_token");
+  const response = await axios.post(`${API_URL}admin-panel/api/paths/`, formData, {
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "multipart/form-data"
-    }
+      "Content-Type": "multipart/form-data",
+    },
   });
   return response.data;
 };
 
-export const approvePath = async (id, token) => {
-  const response = await axios.post(
-    `${BASE_URL}/paths/${id}/approve/`,
-    {},
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
-  return response.data;
-};
-
-export const rejectPath = async (id, token) => {
-  const response = await axios.post(
-    `${BASE_URL}/paths/${id}/reject/`,
-    {},
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
-  return response.data;
-};
-
-export const deletePath = async (id, token) => {
-  const response = await axios.delete(`${BASE_URL}/paths/${id}/`, {
-    headers: { Authorization: `Bearer ${token}` }
+// Utilisateurs connectés
+export const fetchConnectedUsers = async () => {
+  const token = localStorage.getItem("access_token");
+  const response = await axios.get(`${API_URL}admin-panel/api/users/connected/`, {
+    headers: { Authorization: `Bearer ${token}` },
   });
   return response.data;
 };

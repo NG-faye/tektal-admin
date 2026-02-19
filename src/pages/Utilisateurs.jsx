@@ -1,23 +1,20 @@
 import { Search, Users, ShieldCheck, Ban } from "lucide-react";
-import { usePathsList } from "../api/hooks";
+import { useConnectedUsers } from "../api/hooks";
 
 const Utilisateurs = () => {
-  const { data: users, loading, error, refetch } = useConnectedUsers();
+  const { data: users, loading, error } = useConnectedUsers();
 
   const handleBan = (id) => {
-    // Ici tu peux appeler ton endpoint pour bannir un utilisateur
     alert(`Bannir utilisateur ${id} - à implémenter`);
   };
 
   const handleVerify = (id) => {
-    // Ici tu peux appeler ton endpoint pour vérifier un utilisateur
     alert(`Vérifier utilisateur ${id} - à implémenter`);
   };
 
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold text-slate-900">Gestion des Utilisateurs</h1>
-
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
         <input 
@@ -26,7 +23,6 @@ const Utilisateurs = () => {
           className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#FEBD00] outline-none"
         />
       </div>
-
       {loading ? (
         <p className="text-gray-500 text-center">Chargement des utilisateurs...</p>
       ) : error ? (

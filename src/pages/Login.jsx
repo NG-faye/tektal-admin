@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import * as jwt_decode from "jwt-decode"; // ⚡ correction
 import { login } from "../api/apiService";
 
 const Login = () => {
@@ -12,17 +11,10 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-
     try {
       const data = await login(email, password);
       localStorage.setItem("access_token", data.access);
       localStorage.setItem("refresh_token", data.refresh);
-
-      // Décoder le token pour récupérer les infos
-      const userInfo = jwt_decode.default(data.access); 
-      console.log("User info:", userInfo);
-
-      // Rediriger vers le dashboard admin
       navigate("/chemins");
     } catch (err) {
       setError("Email ou mot de passe incorrect");
@@ -36,9 +28,7 @@ const Login = () => {
         className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm space-y-4"
       >
         <h2 className="text-2xl font-bold text-center">Connexion Admin</h2>
-
         {error && <p className="text-red-500">{error}</p>}
-
         <input
           type="email"
           placeholder="Email"
@@ -47,7 +37,6 @@ const Login = () => {
           className="w-full border rounded-xl px-4 py-2"
           required
         />
-
         <input
           type="password"
           placeholder="Mot de passe"
@@ -56,7 +45,6 @@ const Login = () => {
           className="w-full border rounded-xl px-4 py-2"
           required
         />
-
         <button
           type="submit"
           className="w-full bg-[#FEBD00] hover:bg-yellow-400 text-black font-semibold py-2 rounded-xl"

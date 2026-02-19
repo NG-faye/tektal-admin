@@ -1,88 +1,74 @@
-import { useState, useEffect, useCallback } from "react";
-import {
-  getPaths,
-  createPath,
-  approvePath,
-  rejectPath,
-  deletePath
-} from "./apiService";
+import { useState, useEffect } from "react";
+import { fetchPaths, approvePath, rejectPath, createPath, fetchConnectedUsers } from "./apiService";
 
-// ===== Hook générique pour fetch =====
-const useFetch = (fetchFn, deps = []) => {
-  const [data, setData] = useState(null);
+// Hook pour récupérer les parcours
+export const usePathsList = () => {
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetch = useCallback(async () => {
+  const load = async () => {
     setLoading(true);
-    setError(null);
     try {
-      const result = await fetchFn();
-      setData(result);
+      const paths = await fetchPaths();
+      setData(paths);
     } catch (err) {
-      setError(err.response?.data || err.message);
-    } finally {
-      setLoading(false);
+      setError(err);
     }
-  }, deps);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    fetch();
-  }, [fetch]);
+    load();
+  }, []);
 
-  return { data, loading, error, refetch: fetch };
+  return { data, loading, error, refetch: load };
 };
 
-// ===== HOOKS ADMIN =====
-export const usePathsList = (token) =>
-  useFetch(() => getPaths(token));
-
-export const usePathActions = (token, onSuccess) => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const run = async (fn) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const result = await fn();
-      onSuccess?.(result);
-      return result;
-    } catch (err) {
-      setError(err.response?.data || err.message);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
+// Hook pour actions sur les parcours
+export const usePathActions = (refetch) => {
+  const approve = async (id) => {
+    await approvePath(id);
+    refetch();
   };
 
-  return {
-    loading,
-    error,
-    approve: (id) => run(() => approvePath(id, token)),
-    reject: (id) => run(() => rejectPath(id, token)),
-    remove: (id) => run(() => deletePath(id, token))
+  const reject = async (id) => {
+    await rejectPath(id);
+    refetch();
   };
+
+  return { approve, reject };
 };
 
-export const useCreatePath = (token, onSuccess) => {
+// Hook création parcours
+export const useCreatePath = (refetch) => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   const create = async (formData) => {
     setLoading(true);
-    setError(null);
-    try {
-      const result = await createPath(formData, token);
-      onSuccess?.();
-      return result;
-    } catch (err) {
-      setError(err.response?.data || err.message);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
+    await createPath(formData);
+    setLoading(false);
+    refetch();
   };
 
-  return { create, loading, error };
+  return { create, loading };
+};
+
+// Hook utilisateurs connectés
+export const useConnectedUsers = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const load = async () => {
+    setLoading(true);
+    const users = await fetchConnectedUsers();
+    setData(users);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  return { data, loading, refetch: load };
 };
