@@ -3,7 +3,7 @@ import StatCard from "../components/StatCard";
 import { usePathsList, useConnectedUsers } from "../api/hooks";
 
 const Dashboard = () => {
-  const { data: chemins, loading: loadingPaths } = usePathsList();
+  const { data: etablissements, loading: loadingPaths } = usePathsList();
   const { data: users, loading: loadingUsers } = useConnectedUsers();
 
   // Si tu as des endpoints pour "officiels" et "vues", tu peux créer des hooks similaires
