@@ -4,7 +4,7 @@
 /* Fix warning -webkit-text-size-adjust (Tailwind preflight) */
 /* ────────────────────────────────────────────── */
 html {
-  -webkit-text-size-adjust: auto; /* ou 100% */
+  -webkit-text-size-adjust: 100%; /* ou auto, ça évite le warning sur iOS */
 }
 
 /* ────────────────────────────────────────────── */
