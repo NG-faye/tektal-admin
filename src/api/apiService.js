@@ -11,7 +11,7 @@ export const login = async (email, password) => {
   return response.data;
 };
 
-// Liste des parcours admin
+// Liste des parcours
 export const fetchPaths = async () => {
   const token = localStorage.getItem("access_token");
   const response = await axios.get(`${API_URL}admin-panel/api/paths/`, {
@@ -52,6 +52,23 @@ export const createPath = async (formData) => {
 export const fetchConnectedUsers = async () => {
   const token = localStorage.getItem("access_token");
   const response = await axios.get(`${API_URL}admin-panel/api/users/connected/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
+
+// Supprimer un utilisateur
+export const deleteUser = async (id) => {
+  const token = localStorage.getItem("access_token");
+  await axios.delete(`${API_URL}admin-panel/api/users/${id}/delete/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+// Rendre admin / retirer admin
+export const toggleAdmin = async (id) => {
+  const token = localStorage.getItem("access_token");
+  const response = await axios.post(`${API_URL}admin-panel/api/users/${id}/toggle-admin/`, {}, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return response.data;

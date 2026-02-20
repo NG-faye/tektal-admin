@@ -1,12 +1,19 @@
-import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Route, Users } from 'lucide-react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { LayoutDashboard, Route, Users, LogOut } from 'lucide-react';
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+
   const menuItems = [
     { name: 'Dashboard', path: '/', icon: <LayoutDashboard size={20} /> },
     { name: 'Chemins', path: '/chemins', icon: <Route size={20} /> },
     { name: 'Utilisateurs', path: '/utilisateurs', icon: <Users size={20} /> },
   ];
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/login');
+  };
 
   return (
     <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col fixed left-0 top-0">
@@ -34,14 +41,23 @@ const Sidebar = () => {
         ))}
       </nav>
 
-      <div className="p-4 border-t border-gray-100 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-[#FEBD00] text-white flex items-center justify-center font-bold">
-          A
+      <div className="p-4 border-t border-gray-100 flex flex-col gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-[#FEBD00] text-white flex items-center justify-center font-bold">
+            A
+          </div>
+          <div className="overflow-hidden">
+            <p className="text-sm font-semibold text-slate-900 truncate">Admin</p>
+            <p className="text-xs text-gray-500 truncate">admin@tektal.com</p>
+          </div>
         </div>
-        <div className="overflow-hidden">
-          <p className="text-sm font-semibold text-slate-900 truncate">Admin</p>
-          <p className="text-xs text-gray-500 truncate">admin@tektal.com</p>
-        </div>
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-3 px-4 py-2 rounded-lg text-red-500 hover:bg-red-50 transition-colors w-full"
+        >
+          <LogOut size={20} />
+          <span className="text-sm font-medium">Déconnexion</span>
+        </button>
       </div>
     </div>
   );
