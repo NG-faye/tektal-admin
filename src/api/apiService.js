@@ -23,7 +23,7 @@ export const fetchPaths = async () => {
 // Approuver un parcours
 export const approvePath = async (id) => {
   const token = localStorage.getItem("access_token");
-  await axios.post(`${API_URL}admin-panel/api/paths/${id}/approve/`, {}, {
+  await axios.post(`${API_URL}admin-panel/api/paths/approve/${id}/`, {}, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -31,7 +31,7 @@ export const approvePath = async (id) => {
 // Refuser un parcours
 export const rejectPath = async (id) => {
   const token = localStorage.getItem("access_token");
-  await axios.post(`${API_URL}admin-panel/api/paths/${id}/reject/`, {}, {
+  await axios.post(`${API_URL}admin-panel/api/paths/reject/${id}/`, {}, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -42,7 +42,7 @@ export const createPath = async (formData) => {
   const response = await axios.post(`${API_URL}admin-panel/api/paths/`, formData, {
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
     },
   });
   return response.data;
