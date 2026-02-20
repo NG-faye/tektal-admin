@@ -22,19 +22,22 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-50">
+    <div className="flex justify-center items-center min-h-screen bg-gray-50 px-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm space-y-4"
+        className="bg-white p-6 sm:p-8 rounded-2xl shadow-md w-full max-w-sm space-y-4"
       >
-        <h2 className="text-2xl font-bold text-center">Connexion Admin</h2>
-        {error && <p className="text-red-500">{error}</p>}
+        <div className="text-center mb-2">
+          <h1 className="text-xl font-bold text-[#FEBD00]">Tektal Admin</h1>
+          <h2 className="text-2xl font-bold text-slate-900 mt-1">Connexion</h2>
+        </div>
+        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full border rounded-xl px-4 py-2"
+          className="w-full border rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#FEBD00] outline-none"
           required
         />
         <input
@@ -42,12 +45,12 @@ const Login = () => {
           placeholder="Mot de passe"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full border rounded-xl px-4 py-2"
+          className="w-full border rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#FEBD00] outline-none"
           required
         />
         <button
           type="submit"
-          className="w-full bg-[#FEBD00] hover:bg-yellow-400 text-black font-semibold py-2 rounded-xl"
+          className="w-full bg-[#FEBD00] hover:bg-yellow-400 text-black font-semibold py-3 rounded-xl transition"
         >
           Connexion
         </button>

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://127.0.0.1:8000/";
+const API_URL = "https://tektal-backend.onrender.com/admin-panel/api/admin/login/";
 
 // Login admin
 export const login = async (email, password) => {

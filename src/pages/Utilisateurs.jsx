@@ -26,11 +26,10 @@ const Utilisateurs = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-slate-900">Gestion des Utilisateurs</h1>
+      <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Gestion des Utilisateurs</h1>
 
-      {/* Modal confirmation suppression */}
       {userToDelete && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm space-y-4">
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-bold text-slate-900">Confirmer la suppression</h2>
@@ -39,18 +38,18 @@ const Utilisateurs = () => {
               </button>
             </div>
             <p className="text-gray-600 text-sm">
-              Voulez-vous vraiment supprimer l'utilisateur <span className="font-bold text-slate-800">{userToDelete.username}</span> ? Cette action est irréversible.
+              Voulez-vous vraiment supprimer <span className="font-bold text-slate-800">{userToDelete.username}</span> ? Cette action est irréversible.
             </p>
             <div className="flex gap-3 pt-2">
               <button
                 onClick={() => setUserToDelete(null)}
-                className="flex-1 py-2 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
+                className="flex-1 py-2 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 transition text-sm"
               >
                 Annuler
               </button>
               <button
                 onClick={handleDelete}
-                className="flex-1 py-2 rounded-xl bg-red-500 text-white font-semibold hover:bg-red-600 transition-colors"
+                className="flex-1 py-2 rounded-xl bg-red-500 text-white font-semibold hover:bg-red-600 transition text-sm"
               >
                 Supprimer
               </button>
@@ -66,14 +65,14 @@ const Utilisateurs = () => {
           placeholder="Rechercher un membre..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#FEBD00] outline-none"
+          className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#FEBD00] outline-none text-sm"
         />
       </div>
 
       {loading ? (
         <p className="text-gray-500 text-center">Chargement des utilisateurs...</p>
       ) : error ? (
-        <p className="text-red-500 text-center">Erreur: {JSON.stringify(error)}</p>
+        <p className="text-red-500 text-center text-sm">Erreur: {JSON.stringify(error)}</p>
       ) : filtered.length === 0 ? (
         <div className="bg-white p-12 rounded-xl border border-dashed border-gray-300 text-center text-gray-400">
           <Users className="mx-auto mb-2 opacity-10" size={48} />
@@ -83,13 +82,13 @@ const Utilisateurs = () => {
         <div className="space-y-3">
           {filtered.map((user) => (
             <div key={user.id} className="bg-white p-4 rounded-xl border border-gray-100 flex justify-between items-center shadow-sm">
-              <div className="flex items-center gap-4">
-                <div className="w-11 h-11 rounded-full bg-[#FEBD00]/20 text-[#FEBD00] flex items-center justify-center font-bold">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#FEBD00]/20 text-[#FEBD00] flex items-center justify-center font-bold text-sm sm:text-base flex-shrink-0">
                   {user.username?.charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-bold text-slate-800">{user.username}</h3>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="font-bold text-slate-800 text-sm">{user.username}</h3>
                     {user.role === "admin" && (
                       <span className="text-xs bg-[#FEBD00]/20 text-[#FEBD00] px-2 py-0.5 rounded-full font-medium">Admin</span>
                     )}
@@ -97,7 +96,7 @@ const Utilisateurs = () => {
                   <p className="text-xs text-gray-400">{user.email}</p>
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-shrink-0">
                 <button
                   title={user.role === "admin" ? "Retirer admin" : "Rendre admin"}
                   className={`p-2 transition-colors ${user.role === "admin" ? "text-[#FEBD00]" : "text-gray-400 hover:text-[#FEBD00]"}`}
