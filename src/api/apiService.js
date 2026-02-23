@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/admin-panel/api/",
+  baseURL: "https://tektal-backend.onrender.com";
 });
 
 // ✅ Refresh automatique du token
@@ -11,7 +11,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       const refresh = localStorage.getItem("refresh_token");
       if (refresh) {
-        try {
+        try {g
           const res = await axios.post(
            "http://127.0.0.1:8000/api/token/refresh/",
             { refresh }
