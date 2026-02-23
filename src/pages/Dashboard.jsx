@@ -11,32 +11,20 @@ const Dashboard = () => {
   const totalVues = chemins?.reduce((acc, c) => acc + (c.views || 0), 0) || 0;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
-        <p className="text-gray-500">Aperçu global de la plateforme Tektal</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Dashboard</h1>
+        <p className="text-gray-500 text-sm sm:text-base">Aperçu global de la plateforme Tektal</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard
-          label="Chemins"
-          value={loadingPaths ? "..." : totalChemins}
-        />
-        <StatCard
-          label="Utilisateurs"
-          value={loadingUsers ? "..." : totalUsers}
-        />
-        <StatCard
-          label="Chemins approuvés"
-          value={loadingPaths ? "..." : totalOfficiels}
-        />
-        <StatCard
-          label="Vues totales"
-          value={loadingPaths ? "..." : totalVues}
-        />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+        <StatCard label="Chemins" value={loadingPaths ? "..." : totalChemins} />
+        <StatCard label="Utilisateurs" value={loadingUsers ? "..." : totalUsers} />
+        <StatCard label="Approuvés" value={loadingPaths ? "..." : totalOfficiels} />
+        <StatCard label="Vues totales" value={loadingPaths ? "..." : totalVues} />
       </div>
 
-      <div className="bg-white p-8 rounded-xl border border-dashed border-gray-200 text-center text-gray-400 font-medium">
+      <div className="bg-white p-6 sm:p-8 rounded-xl border border-dashed border-gray-200 text-center text-gray-400 font-medium text-sm sm:text-base">
         Graphiques et activités récentes en attente du serveur...
       </div>
     </div>
