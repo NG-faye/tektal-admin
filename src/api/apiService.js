@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://tektal-backend.onrender.com";
+  baseURL: "https://tektal-backend.onrender.com",
 });
 
 // ✅ Refresh automatique du token
