@@ -1,45 +1,76 @@
 import axios from "axios";
 
-const API_URL = "https://tektal-backend.onrender.com/admin-panel/api/admin/login/";
+const api = axios.create({
+  baseURL: "http://127.0.0.1:8000/admin-panel/api/",
+});
+
+// ✅ Refresh automatique du token
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response?.status === 401) {
+      const refresh = localStorage.getItem("refresh_token");
+      if (refresh) {
+        try {
+          const res = await axios.post(
+           "http://127.0.0.1:8000/api/token/refresh/",
+            { refresh }
+          );
+          localStorage.setItem("access_token", res.data.access);
+          error.config.headers["Authorization"] = `Bearer ${res.data.access}`;
+          return api.request(error.config);
+        } catch {
+          localStorage.clear();
+          window.location.href = "/login";
+        }
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 // Login admin
 export const login = async (email, password) => {
-  const response = await axios.post(`${API_URL}admin-panel/api/admin/login/`, {
-    email,
-    password,
-  });
-  return response.data;
+  try {
+    const response = await api.post("admin/login/", { email, password });
+    // ✅ Sauvegarder les deux tokens
+    localStorage.setItem("access_token", response.data.access);
+    localStorage.setItem("refresh_token", response.data.refresh);
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response?.data?.error || "Erreur login");
+  }
 };
 
 // Liste des parcours
 export const fetchPaths = async () => {
   const token = localStorage.getItem("access_token");
-  const response = await axios.get(`${API_URL}admin-panel/api/paths/`, {
+  const response = await api.get("paths/", {
     headers: { Authorization: `Bearer ${token}` },
   });
   return response.data;
 };
 
-// Approuver un parcours
+// Approuver
 export const approvePath = async (id) => {
   const token = localStorage.getItem("access_token");
-  await axios.post(`${API_URL}admin-panel/api/paths/approve/${id}/`, {}, {
+  await api.post(`paths/approve/${id}/`, {}, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
 
-// Refuser un parcours
+// Refuser
 export const rejectPath = async (id) => {
   const token = localStorage.getItem("access_token");
-  await axios.post(`${API_URL}admin-panel/api/paths/reject/${id}/`, {}, {
+  await api.post(`paths/reject/${id}/`, {}, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
 
-// Créer un parcours
+// Créer
 export const createPath = async (formData) => {
   const token = localStorage.getItem("access_token");
-  const response = await axios.post(`${API_URL}admin-panel/api/paths/`, formData, {
+  const response = await api.post("paths/", formData, {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -51,24 +82,24 @@ export const createPath = async (formData) => {
 // Utilisateurs connectés
 export const fetchConnectedUsers = async () => {
   const token = localStorage.getItem("access_token");
-  const response = await axios.get(`${API_URL}admin-panel/api/users/connected/`, {
+  const response = await api.get("users/connected/", {
     headers: { Authorization: `Bearer ${token}` },
   });
   return response.data;
 };
 
-// Supprimer un utilisateur
+// Supprimer user
 export const deleteUser = async (id) => {
   const token = localStorage.getItem("access_token");
-  await axios.delete(`${API_URL}admin-panel/api/users/${id}/delete/`, {
+  await api.delete(`users/${id}/delete/`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
 
-// Rendre admin / retirer admin
+// Toggle admin
 export const toggleAdmin = async (id) => {
   const token = localStorage.getItem("access_token");
-  const response = await axios.post(`${API_URL}admin-panel/api/users/${id}/toggle-admin/`, {}, {
+  const response = await api.post(`users/${id}/toggle-admin/`, {}, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return response.data;
