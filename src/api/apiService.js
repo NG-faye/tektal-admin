@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const BASE_URL = import.meta.env.VITE_API_URL;
+
 const api = axios.create({
-  baseURL: "https://tektal-backend.onrender.com",
+  baseURL: `${BASE_URL}/admin-panel/api/`,
 });
 
 // ✅ Refresh automatique du token
@@ -11,9 +13,9 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       const refresh = localStorage.getItem("refresh_token");
       if (refresh) {
-        try {g
+        try {
           const res = await axios.post(
-           "http://127.0.0.1:8000/api/token/refresh/",
+            `${BASE_URL}/api/token/refresh/`,
             { refresh }
           );
           localStorage.setItem("access_token", res.data.access);
@@ -33,7 +35,6 @@ api.interceptors.response.use(
 export const login = async (email, password) => {
   try {
     const response = await api.post("admin/login/", { email, password });
-    // ✅ Sauvegarder les deux tokens
     localStorage.setItem("access_token", response.data.access);
     localStorage.setItem("refresh_token", response.data.refresh);
     return response.data;

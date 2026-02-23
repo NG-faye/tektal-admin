@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../api/apiService";
+console.log("API URL:", import.meta.env.VITE_API_URL);
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -87,7 +88,7 @@ const Login = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-[#FEBD00] hover:bg-yellow-400 text-black font-semibold py-3 rounded-xl transition flex justify-center items-center"
+          className="w-full bg-[#FEBD00] hover:bg-yellow-400 text-black font-semib old py-3 rounded-xl transition flex justify-center items-center"
         >
           {loading ? "⏳ Connexion..." : "Connexion"}
         </button>
