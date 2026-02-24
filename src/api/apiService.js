@@ -1,7 +1,6 @@
 import axios from "axios";
 
-// ✅ On garde la version dynamique (Vite détectera l'URL automatiquement)
-const BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+const BASE_URL = "https://tektal-backend.onrender.com";
 
 const api = axios.create({
   baseURL: `${BASE_URL}/admin-panel/api/`,
@@ -32,7 +31,7 @@ api.interceptors.response.use(
   }
 );
 
-// --- Le reste de tes fonctions reste identique ---
+// Login admin
 export const login = async (email, password) => {
   try {
     const response = await api.post("admin/login/", { email, password });
@@ -44,6 +43,7 @@ export const login = async (email, password) => {
   }
 };
 
+// Liste des parcours
 export const fetchPaths = async () => {
   const token = localStorage.getItem("access_token");
   const response = await api.get("paths/", {
@@ -52,6 +52,7 @@ export const fetchPaths = async () => {
   return response.data;
 };
 
+// Approuver
 export const approvePath = async (id) => {
   const token = localStorage.getItem("access_token");
   await api.post(`paths/approve/${id}/`, {}, {
@@ -59,6 +60,7 @@ export const approvePath = async (id) => {
   });
 };
 
+// Refuser
 export const rejectPath = async (id) => {
   const token = localStorage.getItem("access_token");
   await api.post(`paths/reject/${id}/`, {}, {
@@ -66,6 +68,7 @@ export const rejectPath = async (id) => {
   });
 };
 
+// Créer
 export const createPath = async (formData) => {
   const token = localStorage.getItem("access_token");
   const response = await api.post("paths/", formData, {
@@ -77,6 +80,7 @@ export const createPath = async (formData) => {
   return response.data;
 };
 
+// Utilisateurs connectés
 export const fetchConnectedUsers = async () => {
   const token = localStorage.getItem("access_token");
   const response = await api.get("users/connected/", {
@@ -85,6 +89,7 @@ export const fetchConnectedUsers = async () => {
   return response.data;
 };
 
+// Supprimer user
 export const deleteUser = async (id) => {
   const token = localStorage.getItem("access_token");
   await api.delete(`users/${id}/delete/`, {
@@ -92,6 +97,7 @@ export const deleteUser = async (id) => {
   });
 };
 
+// Toggle admin
 export const toggleAdmin = async (id) => {
   const token = localStorage.getItem("access_token");
   const response = await api.post(`users/${id}/toggle-admin/`, {}, {
