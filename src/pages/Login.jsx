@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../api/apiService";
-// On importe les icônes ici
+// ✅ On garde les icônes
 import { Eye, EyeOff, Mail, Lock } from "lucide-react"; 
 
 const Login = () => {
+  // Petit ajout pour vérifier l'URL de l'API dans la console
+  console.log("API URL:", import.meta.env.VITE_API_URL);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -74,9 +77,8 @@ const Login = () => {
             required
           />
 
-          {/* Bouton de l'œil */}
           <button
-            type="button" // Très important pour ne pas valider le formulaire
+            type="button"
             className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
             onClick={() => setShowPassword(!showPassword)}
           >
