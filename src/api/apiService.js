@@ -1,9 +1,13 @@
 import axios from "axios";
 
-const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/admin-panel/api/",
-});
+// ✅ CONFIGURATION DE L'URL (Étape 2)
+// On récupère l'URL du serveur. Si elle n'existe pas, on utilise localhost.
+const BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
 
+const api = axios.create({
+  // Utilise la variable d'environnement pour construire l'URL de l'API
+  baseURL: `${BASE_URL}/admin-panel/api/`,
+});
 // ✅ Refresh automatique du token
 api.interceptors.response.use(
   (response) => response,
