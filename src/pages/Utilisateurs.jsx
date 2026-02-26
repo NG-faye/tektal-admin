@@ -48,7 +48,7 @@ const Utilisateurs = () => {
                   <h3 className="font-bold text-slate-800">{user.username}</h3>
                   <p className="text-xs text-gray-400">{user.email}</p>
                 </div>
-              </div>
+              </div> 
               <div className="flex gap-2">
                 <button 
                   className="p-2 text-gray-400 hover:text-[#FEBD00] transition-colors"

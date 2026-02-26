@@ -3,7 +3,7 @@ import { LayoutDashboard, Route, Users } from 'lucide-react';
 
 const Sidebar = () => {
   const menuItems = [
-    { name: 'Dashboard', path: '/', icon: <LayoutDashboard size={20} /> },
+    { name: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard size={20} /> },
     { name: 'Chemins', path: '/chemins', icon: <Route size={20} /> },
     { name: 'Utilisateurs', path: '/utilisateurs', icon: <Users size={20} /> },
   ];
@@ -15,7 +15,7 @@ const Sidebar = () => {
         <p className="text-sm text-gray-500 font-medium">Panneau de contrôle</p>
       </div>
 
-      <nav className="flex-1 px-4 mt-4 space-y-2">
+      <nav className="flex-1 px-4 mt-4 space-y-2"> 
         {menuItems.map((item) => (
           <NavLink
             key={item.name}

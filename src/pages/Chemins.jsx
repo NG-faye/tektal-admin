@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Chemin = () => {
+const Chemins = () => {
   // --- ÉTAT ---
   const [etablissements, setEtablissements] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -121,7 +121,7 @@ const Chemin = () => {
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
             <div className="flex justify-between items-center border-b p-5 bg-slate-50">
-              <h3 className="font-black text-lg">{editingIndex !== null ? 'Modifier' : 'Nouvel'} établissement</h3>
+              <h3 className="font-black text-lg">{editingIndex !== null ? 'Modifier' : 'Nouvel'} l'établissement</h3>
               <button onClick={closeModal} className="text-slate-400 text-2xl">&times;</button>
             </div>
             <form onSubmit={handleSave} className="p-6 space-y-4">
@@ -160,4 +160,4 @@ const Chemin = () => {
   );
 };
 
-export default Chemin;
+export default Chemins;
